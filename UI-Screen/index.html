@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KrishiAI - Smart Farming Powered by AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-container {
+            width: 280px;
+            height: 580px;
+            background: linear-gradient(180deg, #d4edda 0%, #c3e6cb 30%, #b8dfbf 60%, #a8d5b0 100%);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border: 6px solid #1a1a1a;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 40%, #a5d6a7 100%);
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 15px 5px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .status-bar-icons {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        /* Splash Screen */
+        #splash {
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, #b8e994 0%, #78c850 100%);
+        }
+
+        .splash-logo {
+            text-align: center;
+        }
+
+        .splash-logo .leaf-icon {
+            font-size: 50px;
+            color: #2d5a27;
+            margin-bottom: 8px;
+        }
+
+        .splash-logo h1 {
+            font-size: 26px;
+            color: #2d5a27;
+            font-weight: 700;
+        }
+
+        .splash-logo p {
+            color: #3d6e35;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .splash-farm {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(180deg, transparent, #8bc34a);
+        }
+
+        /* Login Screen */
+        #login {
+            padding: 15px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .login-header .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .login-header .logo i {
+            font-size: 28px;
+            color: #2d5a27;
+        }
+
+        .login-header .logo h1 {
+            font-size: 20px;
+            color: #2d5a27;
+        }
+
+        .login-header h2 {
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .login-form {
+            margin-top: 15px;
+        }
+
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .input-group i {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .input-group .country-code {
+            color: #333;
+            font-weight: 500;
+            font-size: 12px;
+            padding-right: 8px;
+            border-right: 1px solid #ddd;
+            margin-right: 5px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 12px;
+            color: #666;
+            font-size: 11px;
+        }
+
+        .signup-link a {
+            color: #2e7d32;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Home Screen */
+        #home {
+            padding: 0;
+        }
+
+        .home-header {
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .greeting h2 {
+            font-size: 13px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .notification-btn {
+            width: 28px;
+            height: 28px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .notification-btn i {
+            font-size: 12px;
+        }
+
+        .weather-card {
+            background: white;
+            margin: 0 12px;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .weather-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .weather-icon {
+            font-size: 30px;
+            color: #ffc107;
+        }
+
+        .weather-temp {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .weather-temp span {
+            font-size: 11px;
+            font-weight: 400;
+            color: #666;
+        }
+
+        .weather-details {
+            display: flex;
+            gap: 10px;
+            font-size: 9px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .weather-details span {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 12px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+
+        .feature-card i {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .feature-card.detect i { color: #4caf50; }
+        .feature-card.irrigation i { color: #2196f3; }
+        .feature-card.chat i { color: #9c27b0; }
+        .feature-card.market i { color: #ff9800; }
+
+        .feature-card h3 {
+            font-size: 10px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 8px 12px 15px;
+            display: flex;
+            justify-content: space-around;
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 -3px 15px rgba(0,0,0,0.08);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-item.active {
+            color: #4caf50;
+        }
+
+        .nav-item i {
+            font-size: 14px;
+        }
+
+        .nav-item span {
+            font-size: 8px;
+            font-weight: 500;
+        }
+
+        /* Scan Screen */
+        #scan {
+            background: #000;
+        }
+
+        .scan-header {
+            background: transparent;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .scan-header h2 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            width: 26px;
+            height: 26px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            border: none;
+            font-size: 11px;
+        }
+
+        .camera-view {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400') center/cover;
+        }
+
+        .scan-frame {
+            width: 160px;
+            height: 160px;
+            border: 2px solid white;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .scan-frame::before,
+        .scan-frame::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #4caf50;
+        }
+
+        .scan-frame::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 8px 0 0 0;
+        }
+
+        .scan-frame::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 8px 0;
+        }
+
+        .scan-instruction {
+            color: white;
+            margin-top: 12px;
+            font-size: 10px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .camera-btn {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid #4caf50;
+        }
+
+        .camera-btn i {
+            font-size: 18px;
+            color: #4caf50;
+        }
+
+        .upload-btn {
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            color: #333;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: none;
+            font-family: inherit;
+        }
+
+        /* Results Screen */
+        #results {
+            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .results-header {
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-header h2 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .disease-card {
+            background: white;
+            margin: 0 12px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .disease-image {
+            width: 100%;
+            height: 100px;
+            background: url('https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400') center/cover;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Chat image button */
+        .chat-input button[style*="ff9800"] {
+            flex-shrink: 0;
+        }
+
+        /* Preview image in chat */
+        .message-bubble img {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .disease-info {
+            padding: 10px;
+        }
+
+        .disease-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .confidence-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 3px;
+        }
+
+        .confidence {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .confidence i {
+            color: #4caf50;
+            font-size: 10px;
+        }
+
+        .confidence span {
+            font-size: 10px;
+            color: #333;
+        }
+
+        .confidence strong {
+            color: #4caf50;
+        }
+
+        .severity {
+            padding: 2px 8px;
+            background: #fff3e0;
+            border-radius: 15px;
+            font-size: 9px;
+            color: #ff9800;
+            font-weight: 500;
+        }
+
+        .recommendations {
+            background: white;
+            margin: 10px 12px;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .recommendations h3 {
+            font-size: 11px;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .recommendations h3 i {
+            color: #4caf50;
+            font-size: 10px;
+        }
+
+        .recommendation-item {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+            font-size: 9px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .recommendation-item i {
+            color: #4caf50;
+            margin-top: 2px;
+            font-size: 8px;
+        }
+
+        .save-btn {
+            margin: 8px 12px 70px;
+        }
+
+        .results-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 8px 12px 15px;
+            display: flex;
+            justify-content: space-around;
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 -3px 15px rgba(0,0,0,0.08);
+        }
+
+        /* Irrigation Screen */
+        #irrigation {
+            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .irrigation-header {
+            background: #4caf50;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .irrigation-header h2 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .moisture-card {
+            background: white;
+            margin: 10px 12px;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .moisture-gauge {
+            width: 100px;
+            height: 50px;
+            margin: 0 auto 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gauge-bg {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #ef5350 0deg 60deg,
+                #ffca28 60deg 120deg,
+                #66bb6a 120deg 180deg
+            );
+            position: absolute;
+            top: 0;
+        }
+
+        .gauge-center {
+            width: 65px;
+            height: 65px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 17px;
+            left: 17px;
+        }
+
+        .gauge-needle {
+            width: 3px;
+            height: 35px;
+            background: #333;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(-50deg);
+            border-radius: 2px;
+        }
+
+        .moisture-value {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .moisture-value i {
+            color: #2196f3;
+            margin-right: 3px;
+        }
+
+        .next-irrigation {
+            background: white;
+            margin: 0 12px;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .next-irrigation h3 {
+            font-size: 11px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .irrigation-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            color: #333;
+        }
+
+        .info-row i {
+            color: #4caf50;
+            font-size: 12px;
+        }
+
+        .weather-forecast {
+            background: white;
+            margin: 10px 12px;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .weather-forecast h3 {
+            font-size: 10px;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .forecast-days {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .forecast-day {
+            text-align: center;
+        }
+
+        .forecast-day .temp {
+            font-size: 8px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .forecast-day i {
+            font-size: 16px;
+            color: #ffc107;
+            margin-bottom: 3px;
+        }
+
+        .forecast-day.cloudy i {
+            color: #90a4ae;
+        }
+
+        .mark-done-btn {
+            margin: 10px 12px 70px;
+        }
+
+        /* Chat Screen */
+        #chat {
+            background: #f5f5f5;
+        }
+
+        .chat-header {
+            background: #4caf50;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .chat-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-header .logo i {
+            font-size: 18px;
+        }
+
+        .chat-header h2 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-bottom: 55px;
+        }
+
+        .message {
+            display: flex;
+            gap: 6px;
+            max-width: 85%;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: #fff3e0;
+        }
+
+        .message.bot .message-avatar {
+            background: #e8f5e9;
+        }
+
+        .message-bubble {
+            padding: 8px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .message.user .message-bubble {
+            background: #e3f2fd;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-bubble {
+            background: white;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .message-bubble .hindi {
+            color: #666;
+            font-size: 8px;
+            font-style: italic;
+            margin-top: 3px;
+        }
+
+        .message-bubble ul {
+            margin-top: 6px;
+            padding-left: 3px;
+        }
+
+        .message-bubble li {
+            margin-bottom: 4px;
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .message-bubble li i {
+            color: #4caf50;
+            margin-top: 2px;
+            font-size: 8px;
+        }
+
+        .chat-input {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 8px 10px 15px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 18px;
+            font-size: 10px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .chat-input button {
+            width: 30px;
+            height: 30px;
+            background: #4caf50;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Fields Screen */
+        #fields {
+            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .fields-header {
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fields-header h2 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .add-field-btn {
+            background: white;
+            border: 1px dashed #4caf50;
+            border-radius: 8px;
+            padding: 8px;
+            margin: 0 12px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #4caf50;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+        }
+
+        .fields-list {
+            padding: 0 12px;
+            padding-bottom: 70px;
+        }
+
+        .field-card {
+            background: white;
+            border-radius: 10px;
+            padding: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            cursor: pointer;
+        }
+
+        .field-image {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .field-info {
+            flex: 1;
+        }
+
+        .field-info h3 {
+            font-size: 11px;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .field-info .details {
+            font-size: 8px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .field-info .details i {
+            margin-right: 3px;
+            color: #4caf50;
+        }
+
+        .health-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 8px;
+            font-weight: 500;
+        }
+
+        .health-badge.healthy {
+            background: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .health-badge.moderate {
+            background: #fff3e0;
+            color: #ff9800;
+        }
+
+        .health-badge.poor {
+            background: #ffebee;
+            color: #f44336;
+        }
+
+        .field-time {
+            font-size: 8px;
+            color: #999;
+        }
+
+        /* Alerts Screen */
+        #alerts {
+            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .alerts-header {
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .alerts-header h2 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-btn {
+            width: 26px;
+            height: 26px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-size: 10px;
+        }
+
+        .alerts-list {
+            padding: 0 12px;
+            padding-bottom: 70px;
+        }
+
+        .alert-card {
+            background: white;
+            border-radius: 10px;
+            padding: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .alert-type {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            font-size: 10px;
+        }
+
+        .alert-type.weather {
+            color: #ff9800;
+        }
+
+        .alert-type.pest {
+            color: #f44336;
+        }
+
+        .alert-type.price {
+            color: #4caf50;
+        }
+
+        .alert-time {
+            font-size: 8px;
+            color: #999;
+        }
+
+        .alert-content {
+            font-size: 9px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .alert-content strong {
+            color: #333;
+        }
+
+        .price-update {
+            margin-top: 5px;
+            padding: 5px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            font-size: 9px;
+            color: #333;
+        }
+
+        /* Profile Screen */
+        #profile {
+            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .profile-header {
+            padding: 10px 12px;
+            text-align: center;
+        }
+
+        .profile-header h2 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            margin: 10px auto;
+            background: #fff3e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .profile-name {
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
+        .profile-name h3 {
+            font-size: 13px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .profile-location {
+            text-align: center;
+            color: #666;
+            font-size: 9px;
+            margin-bottom: 10px;
+        }
+
+        .profile-location i {
+            margin-right: 3px;
+            color: #4caf50;
+        }
+
+        .profile-alerts {
+            padding: 0 12px;
+            padding-bottom: 70px;
+        }
+
+        .profile-alerts h3 {
+            font-size: 11px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* Add Field Modal */
+        .modal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            width: 100%;
+            max-height: 85%;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-header h3 {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            color: #333;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 10px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4caf50;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #4caf50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .screen.active {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Scrollbar styling */
+        .screen::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .screen::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .screen::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <!-- Splash Screen -->
+        <div id="splash" class="screen active">
+            <div class="splash-logo">
+                <i class="fas fa-leaf leaf-icon"></i>
+                <h1>KrishiAI</h1>
+                <p>Smart Farming Powered by AI</p>
+            </div>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="login" class="screen">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-leaf"></i>
+                    <h1>KrishiAI</h1>
+                </div>
+                <h2>Welcome Farmer</h2>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <span class="country-code">+91</span>
+                    <input type="tel" placeholder="Enter your mobile number" value="9876543210" id="phoneInput">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Enter your password" value="password123" id="passwordInput">
+                </div>
+                <button type="submit" class="btn-primary">Log In</button>
+                <p class="demo-note" style="text-align: center; margin-top: 15px; padding: 8px; background: #fff3e0; border-radius: 8px; font-size: 9px; color: #e65100;">
+                    <i class="fas fa-info-circle"></i> This is a <strong>DEMO</strong>. Just click Login to continue!
+                </p>
+                <p class="signup-link">Don't have an account? <a href="#">Sign Up</a></p>
+            </form>
+        </div>
+
+        <!-- Home Screen -->
+        <div id="home" class="screen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-bar-icons">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+            <div class="home-header">
+                <div class="greeting">
+                    <h2>Good Morning, Ramesh</h2>
+                </div>
+                <button class="notification-btn" onclick="showScreen('alerts')">
+                    <i class="fas fa-bell" style="color: #4caf50;"></i>
+                </button>
+            </div>
+            <div class="weather-card">
+                <div class="weather-main">
+                    <i class="fas fa-sun weather-icon"></i>
+                    <div>
+                        <div class="weather-temp">28° <span>Sunny</span></div>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <span><i class="fas fa-temperature-high"></i> 36°/27°</span>
+                    <span><i class="fas fa-tint"></i> Humidity: 65%</span>
+                    <span><i class="fas fa-wind"></i> Wind: 8 km/h</span>
+                </div>
+            </div>
+            <div class="features-grid">
+                <button class="feature-card detect" onclick="showScreen('scan')">
+                    <i class="fas fa-camera"></i>
+                    <h3>Detect Crop Disease</h3>
+                </button>
+                <button class="feature-card irrigation" onclick="showScreen('irrigation')">
+                    <i class="fas fa-tint"></i>
+                    <h3>Irrigation Advice</h3>
+                </button>
+                <button class="feature-card chat" onclick="showScreen('chat')">
+                    <i class="fas fa-robot"></i>
+                    <h3>Chat with AI</h3>
+                </button>
+                <button class="feature-card market" onclick="showMarketPrices()">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Market Prices</h3>
+                </button>
+            </div>
+            <div class="bottom-nav">
+                <button class="nav-item active" onclick="showScreen('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('fields')">
+                    <i class="fas fa-map"></i>
+                    <span>Fields</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('alerts')">
+                    <i class="fas fa-bell"></i>
+                    <span>Alerts</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Scan Screen -->
+        <div id="scan" class="screen">
+            <div class="scan-header">
+                <button class="back-btn" onclick="showScreen('home')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Scan Crop for Disease</h2>
+                <button class="back-btn" style="visibility: hidden;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="camera-view" id="cameraView">
+                <div class="scan-frame" id="scanFrame">
+                    <img id="previewImage" style="width: 100%; height: 100%; object-fit: cover; border-radius: 13px; display: none;">
+                </div>
+                <p class="scan-instruction">Take a clear photo of plant leaf</p>
+                <button class="camera-btn" onclick="scanCrop()">
+                    <i class="fas fa-camera"></i>
+                </button>
+                <input type="file" id="galleryInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event, 'scan')">
+                <button class="upload-btn" onclick="document.getElementById('galleryInput').click()">
+                    <i class="fas fa-image"></i>
+                    Upload from Gallery
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results" class="screen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-bar-icons">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+            <div class="results-header">
+                <button class="back-btn" onclick="showScreen('scan')" style="background: rgba(0,0,0,0.1);">
+                    <i class="fas fa-arrow-left" style="color: #333;"></i>
+                </button>
+                <h2>Result</h2>
+                <div style="width: 35px;"></div>
+            </div>
+            <div class="disease-card">
+                <div class="disease-image" id="resultImage"></div>
+                <div class="disease-info">
+                    <h3 class="disease-name" id="diseaseName">Early Blight</h3>
+                    <div class="confidence-row">
+                        <div class="confidence">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong id="confidenceValue">92%</strong> Confidence</span>
+                        </div>
+                        <span class="severity" id="severityBadge">Moderate</span>
+                    </div>
+                </div>
+            </div>
+            <div class="recommendations" id="recommendationsList">
+                <h3><i class="fas fa-clipboard-list"></i> Recommendations</h3>
+                <div class="recommendation-item">
+                    <i class="fas fa-check"></i>
+                    <span>Remove infected leaves and burn them away from the field.</span>
+                </div>
+                <div class="recommendation-item">
+                    <i class="fas fa-check"></i>
+                    <span>Spray fungicide (Chlorothalonil, Azoxystrobin) every 7-10 days until disease subsides.</span>
+                </div>
+                <div class="recommendation-item">
+                    <i class="fas fa-check"></i>
+                    <span>Avoid overhead watering, keep foliage dry.</span>
+                </div>
+            </div>
+            <button class="btn-primary save-btn" onclick="saveReport()">
+                <i class="fas fa-save"></i> Save Report
+            </button>
+            <div class="results-nav">
+                <button class="nav-item" onclick="showScreen('scan')">
+                    <i class="fas fa-camera"></i>
+                    <span>Camera</span>
+                </button>
+                <button class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </button>
+                <button class="nav-item active">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Report</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Irrigation Screen -->
+        <div id="irrigation" class="screen">
+            <div class="irrigation-header">
+                <button class="back-btn" onclick="showScreen('home')" style="background: rgba(255,255,255,0.2);">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Irrigation Advice</h2>
+                <div style="width: 35px;"></div>
+            </div>
+            <div class="moisture-card">
+                <div class="moisture-gauge">
+                    <div class="gauge-bg"></div>
+                    <div class="gauge-center"></div>
+                    <div class="gauge-needle"></div>
+                </div>
+                <p class="moisture-value"><i class="fas fa-tint"></i> Soil Moisture 24%</p>
+            </div>
+            <div class="next-irrigation">
+                <h3>Next Irrigation</h3>
+                <div class="irrigation-info">
+                    <div class="info-row">
+                        <i class="fas fa-clock"></i>
+                        <span>In 24 Hours</span>
+                    </div>
+                    <div class="info-row">
+                        <i class="fas fa-tint"></i>
+                        <span>1200 Liters Recommended</span>
+                    </div>
+                </div>
+            </div>
+            <div class="weather-forecast">
+                <h3><i class="fas fa-calendar-alt"></i> Recommendations</h3>
+                <div class="forecast-days">
+                    <div class="forecast-day">
+                        <div class="temp">28°/25°</div>
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="temp">29°/26°</div>
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="forecast-day cloudy">
+                        <div class="temp">30°/26°</div>
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="forecast-day cloudy">
+                        <div class="temp">31°/27°</div>
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-primary mark-done-btn" onclick="markIrrigationDone()">
+                <i class="fas fa-check"></i> Mark as Done
+            </button>
+            <div class="results-nav">
+                <button class="nav-item" onclick="showScreen('scan')">
+                    <i class="fas fa-camera"></i>
+                    <span>Camera</span>
+                </button>
+                <button class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </button>
+                <button class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Report</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Screen -->
+        <div id="chat" class="screen">
+            <div class="chat-header">
+                <button class="back-btn" onclick="showScreen('home')" style="background: rgba(255,255,255,0.2);">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="logo">
+                    <i class="fas fa-leaf"></i>
+                    <h2>KrishiAI</h2>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message user">
+                    <div class="message-avatar">&#128104;&#8205;&#127806;</div>
+                    <div class="message-bubble">
+                        Tomato ke patte pe daag kyu pad rahe hain?
+                        <div class="hindi">Why are there spots on my tomato leaves?</div>
+                    </div>
+                </div>
+                <div class="message bot">
+                    <div class="message-avatar">&#129302;</div>
+                    <div class="message-bubble">
+                        It looks like your tomato plant might be suffering from <strong>Early Blight</strong>, a fungal disease.
+                        <ul>
+                            <li><i class="fas fa-check"></i> Remove affected leaves and destroy them.</li>
+                            <li><i class="fas fa-check"></i> Spray fungicide like Chlorothalonil or Azoxystrobin.</li>
+                            <li><i class="fas fa-check"></i> Avoid overhead watering, keep leaves dry.</li>
+                            <li><i class="fas fa-check"></i> Always follow local agricultural guidelines and consult with a local expert when possible.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="file" id="chatImageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event, 'chat')">
+                <button onclick="document.getElementById('chatImageInput').click()" style="background: #ff9800;">
+                    <i class="fas fa-camera"></i>
+                </button>
+                <input type="text" placeholder="Type a message..." id="chatInput">
+                <button onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Fields Screen -->
+        <div id="fields" class="screen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-bar-icons">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+            <div class="fields-header">
+                <h2>My Fields</h2>
+                <button class="filter-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <button class="add-field-btn" onclick="showAddFieldModal()">
+                <i class="fas fa-plus"></i>
+                Add New Field
+            </button>
+            <div class="fields-list">
+                <div class="field-card" onclick="showScreen('scan')">
+                    <div class="field-image" style="background-image: url('https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=100');"></div>
+                    <div class="field-info">
+                        <h3>Tomato</h3>
+                        <div class="details">
+                            <i class="fas fa-ruler-combined"></i> 1.5 acres
+                            <br>Sowed on Feb 10, 2024
+                        </div>
+                        <span class="health-badge moderate">Health: Moderate</span>
+                    </div>
+                    <span class="field-time">Just now</span>
+                </div>
+                <div class="field-card">
+                    <div class="field-image" style="background-image: url('https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?w=100');"></div>
+                    <div class="field-info">
+                        <h3>Rice</h3>
+                        <div class="details">
+                            <i class="fas fa-ruler-combined"></i> 2.0 acres
+                            <br>Sowed on Jan 20, 2024
+                        </div>
+                        <span class="health-badge healthy">Health: Healthy</span>
+                    </div>
+                    <span class="field-time">Just now</span>
+                </div>
+                <div class="field-card">
+                    <div class="field-image" style="background-image: url('https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=100');"></div>
+                    <div class="field-info">
+                        <h3>Cotton</h3>
+                        <div class="details">
+                            <i class="fas fa-ruler-combined"></i> 3.0 acres
+                            <br>Sowed on Jul 5, 2023
+                        </div>
+                        <span class="health-badge poor">Health: Poor</span>
+                    </div>
+                    <span class="field-time">Just now</span>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <button class="nav-item" onclick="showScreen('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </button>
+                <button class="nav-item active" onclick="showScreen('fields')">
+                    <i class="fas fa-map"></i>
+                    <span>Fields</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('alerts')">
+                    <i class="fas fa-bell"></i>
+                    <span>Alerts</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Alerts Screen -->
+        <div id="alerts" class="screen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-bar-icons">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+            <div class="alerts-header">
+                <h2>Alerts</h2>
+                <button class="filter-btn">
+                    <i class="fas fa-filter"></i>
+                </button>
+            </div>
+            <button class="add-field-btn">
+                <i class="fas fa-plus"></i>
+                Add New Field
+            </button>
+            <div class="alerts-list">
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type weather">
+                            <i class="fas fa-cloud-rain"></i>
+                            Weather Warning
+                        </span>
+                        <span class="alert-time">5m ago</span>
+                    </div>
+                    <div class="alert-content">
+                        <strong>Heavy rain and strong winds</strong> expected tomorrow. Prepare drainage.
+                    </div>
+                </div>
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type pest">
+                            <i class="fas fa-bug"></i>
+                            Pest Outbreak
+                        </span>
+                        <span class="alert-time">30m ago</span>
+                    </div>
+                    <div class="alert-content">
+                        <strong>High risk of locust infestation</strong> detected in your area. Monitor your fields closely.
+                    </div>
+                </div>
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type price">
+                            <i class="fas fa-chart-line"></i>
+                            Market Price
+                        </span>
+                        <span class="alert-time">1h ago</span>
+                    </div>
+                    <div class="alert-content">
+                        Good news! <strong>Tomato prices have increased by 12%</strong> today.
+                        <div class="price-update">
+                            Updated price: <strong>&#8377; 3200</strong> per quintal
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <button class="nav-item" onclick="showScreen('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('fields')">
+                    <i class="fas fa-map"></i>
+                    <span>Fields</span>
+                </button>
+                <button class="nav-item active" onclick="showScreen('alerts')">
+                    <i class="fas fa-bell"></i>
+                    <span>Alerts</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div id="profile" class="screen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-bar-icons">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+            <div class="profile-header">
+                <h2>Profile</h2>
+            </div>
+            <div class="profile-avatar">&#128104;&#8205;&#127806;</div>
+            <div class="profile-name">
+                <h3>KrishiAI Farmer</h3>
+            </div>
+            <div class="profile-location">
+                <i class="fas fa-map-marker-alt"></i>
+                Karanat am Modi
+            </div>
+            <div class="profile-alerts">
+                <h3>Recent Alerts</h3>
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type weather">
+                            <i class="fas fa-cloud-rain"></i>
+                            Weather Warning
+                        </span>
+                        <span class="alert-time">5m ago</span>
+                    </div>
+                    <div class="alert-content">
+                        <strong>Heavy rain and strong winds</strong> expected tomorrow. Prepare drainage.
+                    </div>
+                </div>
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type pest">
+                            <i class="fas fa-bug"></i>
+                            Pest Outbreak
+                        </span>
+                        <span class="alert-time">30m ago</span>
+                    </div>
+                    <div class="alert-content">
+                        <strong>High risk of locust infestation</strong> detected in your area. Monitor your fields closely.
+                    </div>
+                </div>
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <span class="alert-type price">
+                            <i class="fas fa-chart-line"></i>
+                            Market Price
+                        </span>
+                        <span class="alert-time">1h ago</span>
+                    </div>
+                    <div class="alert-content">
+                        <strong>&#8377; 3200</strong> per quintal<br>
+                        <small>Updated price</small>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <button class="nav-item" onclick="showScreen('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('fields')">
+                    <i class="fas fa-map"></i>
+                    <span>Fields</span>
+                </button>
+                <button class="nav-item" onclick="showScreen('alerts')">
+                    <i class="fas fa-bell"></i>
+                    <span>Alerts</span>
+                </button>
+                <button class="nav-item active" onclick="showScreen('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Field Modal -->
+        <div class="modal" id="addFieldModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Field</h3>
+                    <button class="close-modal" onclick="closeModal()">&times;</button>
+                </div>
+                <form id="addFieldForm">
+                    <div class="form-group">
+                        <label>Crop Type</label>
+                        <select id="cropType">
+                            <option value="tomato">Tomato</option>
+                            <option value="rice">Rice</option>
+                            <option value="cotton">Cotton</option>
+                            <option value="wheat">Wheat</option>
+                            <option value="sugarcane">Sugarcane</option>
+                            <option value="potato">Potato</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Field Size (acres)</label>
+                        <input type="number" id="fieldSize" value="1.5" step="0.1" min="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Sowing Date</label>
+                        <input type="date" id="sowingDate" value="2024-02-10">
+                    </div>
+                    <div class="form-group">
+                        <label>Field Location</label>
+                        <input type="text" id="fieldLocation" placeholder="Enter location" value="North Field, Village Karanat">
+                    </div>
+                    <button type="submit" class="btn-primary">Add Field</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Default data
+        const defaultUser = {
+            name: 'Ramesh',
+            phone: '9876543210',
+            password: 'password123',
+            location: 'Karanat am Modi'
+        };
+
+        const defaultFields = [
+            { id: 1, crop: 'Tomato', size: 1.5, sowDate: '2024-02-10', health: 'moderate' },
+            { id: 2, crop: 'Rice', size: 2.0, sowDate: '2024-01-20', health: 'healthy' },
+            { id: 3, crop: 'Cotton', size: 3.0, sowDate: '2023-07-05', health: 'poor' }
+        ];
+
+        // Disease database for AI diagnosis
+        const diseaseDatabase = [
+            {
+                name: 'Early Blight',
+                confidence: 92,
+                severity: 'Moderate',
+                severityClass: 'moderate',
+                recommendations: [
+                    'Remove infected leaves and burn them away from the field.',
+                    'Spray fungicide (Chlorothalonil, Azoxystrobin) every 7-10 days.',
+                    'Avoid overhead watering, keep foliage dry.',
+                    'Rotate crops and use disease-free seeds.'
+                ],
+                medicine: 'Mancozeb 75% WP, Chlorothalonil, Copper Oxychloride'
+            },
+            {
+                name: 'Late Blight',
+                confidence: 88,
+                severity: 'Severe',
+                severityClass: 'poor',
+                recommendations: [
+                    'Remove and destroy all infected plant parts immediately.',
+                    'Apply Metalaxyl + Mancozeb fungicide spray.',
+                    'Improve air circulation between plants.',
+                    'Avoid wetting leaves during irrigation.'
+                ],
+                medicine: 'Metalaxyl 8% + Mancozeb 64% WP, Cymoxanil'
+            },
+            {
+                name: 'Powdery Mildew',
+                confidence: 95,
+                severity: 'Mild',
+                severityClass: 'healthy',
+                recommendations: [
+                    'Apply sulfur-based fungicide or neem oil spray.',
+                    'Ensure proper spacing between plants for airflow.',
+                    'Water at the base, not on leaves.',
+                    'Remove heavily infected leaves.'
+                ],
+                medicine: 'Sulfur 80% WP, Karathane, Neem Oil'
+            },
+            {
+                name: 'Bacterial Leaf Spot',
+                confidence: 85,
+                severity: 'Moderate',
+                severityClass: 'moderate',
+                recommendations: [
+                    'Apply copper-based bactericide (Copper Hydroxide).',
+                    'Remove infected leaves and destroy them.',
+                    'Avoid working with wet plants.',
+                    'Use disease-free seeds and resistant varieties.'
+                ],
+                medicine: 'Copper Hydroxide, Streptomycin Sulphate, Bordeaux Mixture'
+            },
+            {
+                name: 'Leaf Curl Virus',
+                confidence: 90,
+                severity: 'Severe',
+                severityClass: 'poor',
+                recommendations: [
+                    'Control whitefly vectors with Imidacloprid spray.',
+                    'Remove and destroy infected plants.',
+                    'Use virus-resistant varieties.',
+                    'Install yellow sticky traps to monitor pests.'
+                ],
+                medicine: 'Imidacloprid 17.8% SL, Thiamethoxam, Neem-based pesticides'
+            }
+        ];
+
+        const chatResponses = {
+            'disease': 'Based on your description, it could be a fungal infection. I recommend: 1) Remove affected leaves 2) Apply copper-based fungicide 3) Ensure proper spacing between plants.',
+            'water': 'For optimal irrigation, water your crops early morning or late evening. Current soil moisture is 24%. Next irrigation recommended in 24 hours with 1200 liters.',
+            'price': 'Current market prices: Tomato - ₹3200/quintal (+12%), Rice - ₹2800/quintal, Cotton - ₹6500/quintal. Tomato prices are at a high this week!',
+            'weather': 'Weather forecast for next 4 days: Tomorrow - Heavy rain expected, prepare drainage. Days 2-4 - Partly cloudy with moderate temperatures (28-31°C).',
+            'default': 'I understand your concern. Could you please provide more details about your query? You can ask me about crop diseases, irrigation, market prices, or weather forecasts.'
+        };
+
+        // Handle image upload
+        function handleImageUpload(event, source) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = e.target.result;
+
+                // Store in localStorage
+                localStorage.setItem('uploadedCropImage', imageData);
+                localStorage.setItem('uploadTime', new Date().toISOString());
+
+                if (source === 'scan') {
+                    // Show preview in scan frame
+                    const preview = document.getElementById('previewImage');
+                    preview.src = imageData;
+                    preview.style.display = 'block';
+
+                    // Simulate AI analysis
+                    setTimeout(() => {
+                        analyzeAndShowResults(imageData);
+                    }, 1500);
+                } else if (source === 'chat') {
+                    // Add image to chat and analyze
+                    addImageToChat(imageData);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Analyze image and show results
+        function analyzeAndShowResults(imageData) {
+            // Randomly select a disease for demo
+            const disease = diseaseDatabase[Math.floor(Math.random() * diseaseDatabase.length)];
+
+            // Store diagnosis in localStorage
+            localStorage.setItem('lastDiagnosis', JSON.stringify(disease));
+
+            // Update results screen
+            const resultImage = document.getElementById('resultImage');
+            resultImage.style.backgroundImage = `url(${imageData})`;
+            resultImage.style.backgroundSize = 'cover';
+            resultImage.style.backgroundPosition = 'center';
+
+            document.getElementById('diseaseName').textContent = disease.name;
+            document.getElementById('confidenceValue').textContent = disease.confidence + '%';
+
+            const severityBadge = document.getElementById('severityBadge');
+            severityBadge.textContent = disease.severity;
+            severityBadge.className = 'severity';
+            if (disease.severityClass === 'poor') {
+                severityBadge.style.background = '#ffebee';
+                severityBadge.style.color = '#f44336';
+            } else if (disease.severityClass === 'moderate') {
+                severityBadge.style.background = '#fff3e0';
+                severityBadge.style.color = '#ff9800';
+            } else {
+                severityBadge.style.background = '#e8f5e9';
+                severityBadge.style.color = '#4caf50';
+            }
+
+            // Update recommendations
+            const recList = document.getElementById('recommendationsList');
+            recList.innerHTML = `
+                <h3><i class="fas fa-clipboard-list"></i> Recommendations</h3>
+                ${disease.recommendations.map(rec => `
+                    <div class="recommendation-item">
+                        <i class="fas fa-check"></i>
+                        <span>${rec}</span>
+                    </div>
+                `).join('')}
+                <div class="recommendation-item" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee;">
+                    <i class="fas fa-pills" style="color: #9c27b0;"></i>
+                    <span><strong>Medicine:</strong> ${disease.medicine}</span>
+                </div>
+            `;
+
+            showScreen('results');
+        }
+
+        // Add image to chat with AI response
+        function addImageToChat(imageData) {
+            const messagesContainer = document.getElementById('chatMessages');
+
+            // Add user image message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `
+                <div class="message-avatar">&#128104;&#8205;&#127806;</div>
+                <div class="message-bubble">
+                    <img src="${imageData}" style="width: 100%; max-width: 150px; border-radius: 8px; margin-bottom: 5px;">
+                    <div>Please check this crop image for any disease.</div>
+                </div>
+            `;
+            messagesContainer.appendChild(userMsg);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Simulate AI analyzing
+            setTimeout(() => {
+                const disease = diseaseDatabase[Math.floor(Math.random() * diseaseDatabase.length)];
+
+                // Store in localStorage
+                localStorage.setItem('lastChatDiagnosis', JSON.stringify({
+                    image: imageData,
+                    disease: disease,
+                    time: new Date().toISOString()
+                }));
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                botMsg.innerHTML = `
+                    <div class="message-avatar">&#129302;</div>
+                    <div class="message-bubble">
+                        <strong>AI Analysis Complete!</strong><br><br>
+                        <strong>Disease Detected:</strong> ${disease.name}<br>
+                        <strong>Confidence:</strong> ${disease.confidence}%<br>
+                        <strong>Severity:</strong> <span style="color: ${disease.severityClass === 'poor' ? '#f44336' : disease.severityClass === 'moderate' ? '#ff9800' : '#4caf50'}">${disease.severity}</span><br><br>
+                        <strong>Recommended Treatment:</strong>
+                        <ul style="margin-top: 5px;">
+                            ${disease.recommendations.slice(0, 2).map(rec => `<li><i class="fas fa-check"></i> ${rec}</li>`).join('')}
+                        </ul>
+                        <div style="margin-top: 8px; padding: 6px; background: #f3e5f5; border-radius: 6px;">
+                            <i class="fas fa-pills" style="color: #9c27b0;"></i>
+                            <strong>Medicine:</strong> ${disease.medicine}
+                        </div>
+                    </div>
+                `;
+                messagesContainer.appendChild(botMsg);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 2000);
+        }
+
+        // Load saved image on page load
+        function loadSavedImage() {
+            const savedImage = localStorage.getItem('uploadedCropImage');
+            if (savedImage) {
+                const preview = document.getElementById('previewImage');
+                if (preview) {
+                    preview.src = savedImage;
+                    preview.style.display = 'block';
+                }
+            }
+        }
+
+        // Show splash screen for 2 seconds then show login
+        setTimeout(() => {
+            showScreen('login');
+        }, 2000);
+
+        // Load saved data on page load
+        window.onload = function() {
+            loadSavedImage();
+        };
+
+        // Screen navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phoneInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            if (phone && password) {
+                showScreen('home');
+            }
+        });
+
+        // Scan crop function
+        function scanCrop() {
+            // Simulate scanning
+            const scanFrame = document.querySelector('.scan-frame');
+            scanFrame.style.borderColor = '#4caf50';
+
+            setTimeout(() => {
+                // Check if there's an uploaded image
+                const savedImage = localStorage.getItem('uploadedCropImage');
+                if (savedImage) {
+                    analyzeAndShowResults(savedImage);
+                } else {
+                    // Use default image and random disease
+                    const disease = diseaseDatabase[Math.floor(Math.random() * diseaseDatabase.length)];
+                    localStorage.setItem('lastDiagnosis', JSON.stringify(disease));
+
+                    document.getElementById('diseaseName').textContent = disease.name;
+                    document.getElementById('confidenceValue').textContent = disease.confidence + '%';
+
+                    const severityBadge = document.getElementById('severityBadge');
+                    severityBadge.textContent = disease.severity;
+                    if (disease.severityClass === 'poor') {
+                        severityBadge.style.background = '#ffebee';
+                        severityBadge.style.color = '#f44336';
+                    } else if (disease.severityClass === 'moderate') {
+                        severityBadge.style.background = '#fff3e0';
+                        severityBadge.style.color = '#ff9800';
+                    } else {
+                        severityBadge.style.background = '#e8f5e9';
+                        severityBadge.style.color = '#4caf50';
+                    }
+
+                    const recList = document.getElementById('recommendationsList');
+                    recList.innerHTML = `
+                        <h3><i class="fas fa-clipboard-list"></i> Recommendations</h3>
+                        ${disease.recommendations.map(rec => `
+                            <div class="recommendation-item">
+                                <i class="fas fa-check"></i>
+                                <span>${rec}</span>
+                            </div>
+                        `).join('')}
+                        <div class="recommendation-item" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee;">
+                            <i class="fas fa-pills" style="color: #9c27b0;"></i>
+                            <span><strong>Medicine:</strong> ${disease.medicine}</span>
+                        </div>
+                    `;
+
+                    showScreen('results');
+                }
+            }, 1500);
+        }
+
+        // Save report function
+        function saveReport() {
+            alert('Report saved successfully!');
+        }
+
+        // Mark irrigation as done
+        function markIrrigationDone() {
+            alert('Irrigation marked as complete!');
+            showScreen('home');
+        }
+
+        // Show market prices
+        function showMarketPrices() {
+            alert('Market Prices:\n\nTomato: ₹3200/quintal (+12%)\nRice: ₹2800/quintal\nCotton: ₹6500/quintal\nWheat: ₹2400/quintal\nPotato: ₹1800/quintal');
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            const messagesContainer = document.getElementById('chatMessages');
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `
+                <div class="message-avatar">&#128104;&#8205;&#127806;</div>
+                <div class="message-bubble">${message}</div>
+            `;
+            messagesContainer.appendChild(userMsg);
+
+            // Determine response
+            let response = chatResponses.default;
+            const lowerMessage = message.toLowerCase();
+
+            if (lowerMessage.includes('disease') || lowerMessage.includes('spot') || lowerMessage.includes('leaf') || lowerMessage.includes('blight')) {
+                response = chatResponses.disease;
+            } else if (lowerMessage.includes('water') || lowerMessage.includes('irrigation') || lowerMessage.includes('moisture')) {
+                response = chatResponses.water;
+            } else if (lowerMessage.includes('price') || lowerMessage.includes('market') || lowerMessage.includes('sell')) {
+                response = chatResponses.price;
+            } else if (lowerMessage.includes('weather') || lowerMessage.includes('rain') || lowerMessage.includes('temperature')) {
+                response = chatResponses.weather;
+            }
+
+            // Add bot response after delay
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                botMsg.innerHTML = `
+                    <div class="message-avatar">&#129302;</div>
+                    <div class="message-bubble">${response}</div>
+                `;
+                messagesContainer.appendChild(botMsg);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000);
+
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Enter key to send message
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Add field modal
+        function showAddFieldModal() {
+            document.getElementById('addFieldModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('addFieldModal').classList.remove('active');
+        }
+
+        // Add field form handler
+        document.getElementById('addFieldForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const cropType = document.getElementById('cropType').value;
+            const fieldSize = document.getElementById('fieldSize').value;
+            const sowingDate = document.getElementById('sowingDate').value;
+            const location = document.getElementById('fieldLocation').value;
+
+            alert(`Field added successfully!\n\nCrop: ${cropType}\nSize: ${fieldSize} acres\nSowing Date: ${sowingDate}\nLocation: ${location}`);
+            closeModal();
+        });
+
+        // Close modal on outside click
+        document.getElementById('addFieldModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
